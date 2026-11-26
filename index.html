@@ -2,6 +2,7 @@
 <html lang="id"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Personal Finance Intelligence</title>
+<meta name="theme-color" content="#2563EB"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Finance">
 <style>
 :root{--bg:#FAF6F1;--sf:#fff;--pr:#6B4226;--tx:#2B1D14;--t2:#8A7566;--inc:#16A36A;--exp:#E5484D;--wr:#F59E0B;--ac:#A9744F;--bd:#EADFD3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1C1511;--sf:#2A201A;--tx:#FBF6F0;--t2:#B9A596;--bd:#43342B;--pr:#C9986B}}
@@ -124,7 +125,7 @@ body.priv .big,body.priv .chip,body.priv .row>b,body.priv td,body.priv .bub .chi
 [data-skin="fintech"] .card{border-radius:16px;border:1px solid var(--bd);box-shadow:0 1px 2px rgba(15,23,42,.04),0 10px 26px -18px rgba(15,23,42,.16)}
 [data-skin="fintech"] .btn:not(.g):not(.d){background:var(--pr);box-shadow:none;border-radius:10px}.btn.g{border-radius:10px}
 [data-skin="fintech"] .btn.g{border-radius:10px}
-[data-skin="fintech"] nav{background:var(--sf);display:flex;flex-direction:column}
+[data-skin="fintech"] nav{background:var(--sf)}@media(min-width:761px){[data-skin="fintech"] nav{display:flex;flex-direction:column}}
 [data-skin="fintech"] nav a{border-radius:10px}[data-skin="fintech"] nav a:hover{transform:none}
 :root[data-skin="fintech"] nav a.on{background:color-mix(in srgb,var(--pr) 12%,transparent);color:var(--pr);font-weight:600}
 :root[data-skin="fintech"] .fab{background:var(--pr);color:#fff;animation:none}
@@ -149,6 +150,7 @@ body.priv .big,body.priv .chip,body.priv .row>b,body.priv td,body.priv .bub .chi
 @media(max-width:700px){.hm{display:none}.dn{grid-template-columns:1fr}.dn .ch{height:170px}.ch{height:210px}.wr{width:100%}.wr select{flex:1}
 [data-skin="fintech"] #mb{left:0;right:0;bottom:0;border-radius:0;border-width:1px 0 0;box-shadow:none}
 :root[data-skin="fintech"] #mb a.on{background:color-mix(in srgb,var(--pr) 12%,transparent);color:var(--pr);border-radius:12px}}
+main{min-width:0}@media(min-width:1100px){main{max-width:1240px}}html,body{overflow-x:hidden}
 </style><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Zen+Maru+Gothic:wght@400;700&family=Inter:wght@400;500;600;700&display=swap">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head><body>
@@ -544,5 +546,9 @@ const dn=donut();if(g("c3"))CH.push(new Chart(g("c3"),{type:"doughnut",data:{lab
 if(g("c4")){const bs=S.budgets.slice(0,6),nm=bs.map(b=>(b.cat==="*"?"Semua":b.cat));CH.push(new Chart(g("c4"),{type:"bar",data:{labels:nm,datasets:[{label:"Anggaran",data:bs.map(b=>b.limit),backgroundColor:"#BFD3FB",borderRadius:4},{label:"Realisasi",data:bs.map(b=>spent(b)),backgroundColor:"#2563EB",borderRadius:4}]},options:Object.assign(base(true),{indexAxis:"y",scales:{x:ax(1),y:{ticks:{color:tc},grid:{display:false}}}})}))}};
 const _r4=render;render=function(){_r4();const nv=$("#nav");if(!nv)return;const v=balSeries(14),mn=Math.min(...v),mx=Math.max(...v),pts=v.map((x,i)=>(i*120/13).toFixed(1)+","+(34-(mx===mn?17:(x-mn)/(mx-mn)*30)).toFixed(1)).join(" ");
 nv.insertAdjacentHTML("beforeend",`<div class="nbal"><small>Total saldo</small><b>${rp(v[v.length-1])}</b><svg viewBox="0 0 120 38" width="100%" height="38" aria-hidden="true"><polyline points="${pts}" fill="none" stroke="var(--pr)" stroke-width="2" stroke-linejoin="round"/></svg><small>14 hari terakhir</small></div>`)};
+let ip=null;addEventListener("beforeinstallprompt",e=>{e.preventDefault();ip=e;render()});addEventListener("appinstalled",()=>{ip=null;toast("Aplikasi terpasang");render()});
+const _s5=set;set=()=>_s5()+`<div class="card"><h3>Pasang di ponsel</h3>${ip?'<button class="btn" data-act="install">Instal aplikasi</button>':'<p class="lbl" style="margin:0">Android (Chrome): menu ⋮ lalu Instal aplikasi atau Tambahkan ke layar utama. iPhone (Safari): tombol Bagikan lalu Tambah ke Layar Utama. Harus dibuka lewat alamat https, misalnya GitHub Pages.</p>'}</div>`;
+document.addEventListener("click",e=>{if(e.target.closest('[data-act="install"]')&&ip){ip.prompt();ip=null;render()}});
+if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol))addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 loadData();applyTheme();ls("pfi_onboarding")==="done"?enter():intro();
 </script></body></html>
